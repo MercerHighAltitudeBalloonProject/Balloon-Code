@@ -65,6 +65,8 @@ float pressureFloats[4];
 float humidityFloats[2];
 String storeData;
 
+int deviceAddresses[] = {1, 2, 3, 8};
+
 /**************************************************************************/
 /*
     Display sensor calibration status
@@ -104,6 +106,7 @@ void setup(void)
   storeRate = 3000;
   Wire.begin();
   Serial.begin(9600);
+  Serial.println("\nInit");
   
   //GPS Setup
   Serial1.begin(4800);
@@ -156,7 +159,10 @@ void loop(void)
       getI2CData();
       obtainHumidityInfo();
       obtainGPSInfo();
-      writeDataToFile();
+      String storeage = getStorageString();
+      Serial.println(storeage);
+      writeStringToFile("data.txt", storeData, true);  
+      sendMessageToAll(storeage);
       storeData = "";
     }
   }
